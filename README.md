@@ -17,18 +17,18 @@ MDP/
 ├── static/       
 ├── README.md       
 ├── LICENSE       
-└── models/        
-    ├── heart_model.pkl       
-    ├── diabetes_model.pkl     
-    ├── flu_model.pkl      
-    ├── cold_model.pkl      
-    └── allergy_model.pkl      
-    ├── heart_model.pkl     
-    ├── diabetes.py    
-    ├── flu.py    
-    ├── cold.py   
-    └── allergy.py    
-    ├── flu.py     
+└── models/         
+     ├── heart_model.pkl       
+     ├── diabetes_model.pkl     
+     ├── flu_model.pkl      
+     ├── cold_model.pkl      
+     └── allergy_model.pkl      
+     ├── heart_model.pkl     
+     ├── diabetes.py    
+     ├── flu.py    
+     ├── cold.py   
+     └── allergy.py    
+     ├── flu.py     
    
 
 ## Setup and Run
@@ -50,7 +50,7 @@ MDP/
 ## Contributors
 
 - [Rauf](#)    
-- [Mudassir    
+- [Mudassir](#)      
 - [peter](#)   
 - [Abdullah](#)    
 

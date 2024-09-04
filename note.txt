@@ -1,0 +1,7 @@
+## use that to run the app ( if python app.py does not work , install the requirements.txt too if ya forgot )
+
+> uvicorn app:app --reload 
+
+## if got errors use 
+
+> pip install -r requirements.txt

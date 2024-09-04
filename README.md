@@ -49,7 +49,7 @@ MDP/
 
 ## Contributors
 
-- [Rauf](#)    
+- [Rauf](https://rauf-psi.vercel.app/)    
 - [Mudassir](#)      
 - [peter](#)   
 - [Abdullah](#)    

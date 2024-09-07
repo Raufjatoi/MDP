@@ -111,12 +111,12 @@
             <div class="chat-message">
                 Welcome to the Cold Predictor. I'll ask you a few questions to assess your risk. Please answer honestly.
             </div>
-            <div class="chat-message">
-                Do you have a runny or stuffy nose? (Yes/No)
+            <div id="questions-container">
+                <!-- Questions will be dynamically added here -->
             </div>
             <div>
-                <button class="btn btn-green">Yes</button>
-                <button class="btn btn-green">No</button>
+                <button class="btn btn-green" onclick="answerQuestion('Yes')">Yes</button>
+                <button class="btn btn-green" onclick="answerQuestion('No')">No</button>
             </div>
         </div>
         <div class="action-buttons">
@@ -131,6 +131,7 @@
                     <button data-lang="ur">Urdu</button>
                     <button data-lang="en">English</button>
                     <button data-lang="ru">Russian</button>
+                    <button data-lang="ta">Tamil</button>
                 </div>
             </div>
         </div>
@@ -149,6 +150,51 @@
                 synth.speak(utterance);
             });
         });
+
+        // Questions array
+        const questions = [
+            "Do you have a cough?",
+            "Do you have muscle aches?",
+            "Do you feel tired?",
+            "Do you have a sore throat?",
+            "Do you have a runny nose?",
+            "Do you have a stuffy nose?",
+            "Do you have a fever?",
+            "Do you experience nausea?",
+            "Do you experience vomiting?",
+            "Do you have diarrhea?",
+            "Do you experience shortness of breath?",
+            "Do you have difficulty breathing?",
+            "Have you lost your sense of taste?",
+            "Have you lost your sense of smell?",
+            "Do you have an itchy nose?",
+            "Do you have itchy eyes?",
+            "Do you have an itchy mouth?",
+            "Do you have an itchy inner ear?",
+            "Do you experience sneezing?",
+            "Do you have pink eye?"
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function displayNextQuestion() {
+            const questionsContainer = document.getElementById('questions-container');
+            if (currentQuestionIndex < questions.length) {
+                questionsContainer.innerHTML = `<div class="chat-message">${questions[currentQuestionIndex]}</div>`;
+                currentQuestionIndex++;
+            } else {
+                questionsContainer.innerHTML = '<div class="chat-message">Thank you for answering all the questions. We will now analyze your responses.</div>';
+                document.querySelectorAll('.btn-green').forEach(btn => btn.style.display = 'none');
+            }
+        }
+
+        function answerQuestion(answer) {
+            // Here you can handle the user's answer (e.g., send it to the server)
+            console.log(`Question ${currentQuestionIndex}: ${answer}`);
+            displayNextQuestion();
+        }
+
+        displayNextQuestion(); // Display the first question
 
         // Translation functionality
         const translateButton = document.getElementById('translate');
@@ -184,14 +230,147 @@
                 case 'ru':
                     translateToRussian();
                     break;
+                case 'ta':
+                    translateToTamil();
+                    break;
             }
             currentLanguage = lang;
+        }
+
+        function getChineseQuestion(index) {
+            const chineseQuestions = [
+                "您是否经常咳嗽？",
+                "您是否有肌肉疼痛？",
+                "您是否感到疲劳？",
+                "您是否喉咙痛？",
+                "您是否流鼻涕？",
+                "您是否鼻塞？",
+                "您是否发烧？",
+                "您是否感到恶心？",
+                "您是否呕吐？",
+                "您是否腹泻？",
+                "您是否感到呼吸短促？",
+                "您是否呼吸困难？",
+                "您是否失去味觉？",
+                "您是否失去嗅觉？",
+                "您的鼻子是否发痒？",
+                "您的眼睛是否发痒？",
+                "您的嘴是否发痒？",
+                "您的内耳是否发痒？",
+                "您是否经常打喷嚏？",
+                "您是否患有结膜炎（红眼病）？"
+            ];
+            return chineseQuestions[index];
+        }
+
+        function getHindiQuestion(index) {
+            const hindiQuestions = [
+                "क्या आपको खांसी होती है?",
+                "क्या आपको मांसपेशियों में दर्द होता है?",
+                "क्या आप थकान महसूस करते हैं?",
+                "क्या आपके गले में दर्द है?",
+                "क्या आपकी नाक बहती है?",
+                "क्या आपकी नाक बंद है?",
+                "क्या आपको बुखार है?",
+                "क्या आपको मतली होती है?",
+                "क्या आपको उल्टी होती है?",
+                "क्या आपको दस्त होते हैं?",
+                "क्या आपको सांस लेने में कठिनाई होती है?",
+                "क्या आपको सांस लेने में तकलीफ होती है?",
+                "क्या आपने स्वाद की भावना खो दी है?",
+                "क्या आपने गंध की भावना खो दी है?",
+                "क्या आपकी नाक में खुजली होती है?",
+                "क्या आपकी आंखों में खुजली होती है?",
+                "क्या आपके मुंह में खुजली होती है?",
+                "क्या आपके अंदरूनी कान में खुजली होती है?",
+                "क्या आपको छींक आती है?",
+                "क्या आपको आंख आना (पिंक आई) है?"
+            ];
+            return hindiQuestions[index];
+        }
+
+        function getUrduQuestion(index) {
+            const urduQuestions = [
+                "کیا آپ کو کھانسی ہوتی ہے؟",
+                "کیا آپ کو پٹھوں میں درد ہوتا ہے؟",
+                "کیا آپ تھکاوٹ محسوس کرتے ہیں؟",
+                "کیا آپ کے گلے میں درد ہے؟",
+                "کیا آپ کی ناک بہتی ہے؟",
+                "کیا آپ کی ناک بند ہے؟",
+                "کیا آپ کو بخار ہے؟",
+                "کیا آپ کو متلی ہوتی ہے؟",
+                "کیا آپ کو الٹی ہوتی ہے؟",
+                "کیا آپ کو اسہال ہوتا ہے؟",
+                "کیا آپ کو سانس لینے میں دشواری ہوتی ہے؟",
+                "کیا آپ کو سانس لینے میں تکلیف ہوتی ہے؟",
+                "کیا آپ نے ذائقہ کی حس کھو دی ہے؟",
+                "کیا آپ نے سونگھنے کی حس کھو دی ہے؟",
+                "کیا آپ کی ناک میں کھجلی ہوتی ہے؟",
+                "کیا آپ کی آنکھوں میں کھجلی ہوتی ہے؟",
+                "کیا آپ کے منہ میں کھجلی ہوتی ہے؟",
+                "کیا آپ کے اندرونی کان میں کھجلی ہوتی ہے؟",
+                "کیا آپ کو چھینک آتی ہے؟",
+                "کیا آپ کو آنکھ آنا (پنک آئی) ہے؟"
+            ];
+            return urduQuestions[index];
+        }
+
+        function getRussianQuestion(index) {
+            const russianQuestions = [
+                "У вас есть кашель?",
+                "У вас болят мышцы?",
+                "Вы чувствуете усталость?",
+                "У вас болит горло?",
+                "У вас насморк?",
+                "У вас заложен нос?",
+                "У вас есть температура?",
+                "Вы испытываете тошноту?",
+                "Вас тошнит?",
+                "У вас диарея?",
+                "Вы испытываете одышку?",
+                "Вам трудно дышать?",
+                "Вы потеряли чувство вкуса?",
+                "Вы потеряли обоняние?",
+                "У вас зуд в носу?",
+                "У вас зуд в глазах?",
+                "У вас зуд во рту?",
+                "У вас зуд во внутреннем ухе?",
+                "Вы чихаете?",
+                "У вас конъюнктивит (розовый глаз)?"
+            ];
+            return russianQuestions[index];
+        }
+
+        function getTamilQuestion(index) {
+            const tamilQuestions = [
+                "உங்களுக்கு இருமல் உள்ளதா?",
+                "உங்களுக்கு தசை வலி உள்ளதா?",
+                "நீங்கள் சோர்வாக உணருகிறீர்களா?",
+                "உங்களுக்கு தொண்டை வலி உள்ளதா?",
+                "உங்களுக்கு மூக்கு ஒழுகுகிறதா?",
+                "உங்கள் மூக்கு அடைத்துள்ளதா?",
+                "உங்களுக்கு காய்ச்சல் உள்ளதா?",
+                "உங்களுக்கு குமட்டல் ஏற்படுகிறதா?",
+                "உங்களுக்கு வாந்தி வருகிறதா?",
+                "உங்களுக்கு வயிற்றுப்போக்கு உள்ளதா?",
+                "உங்களுக்கு மூச்சுத் திணறல் ஏற்படுகிறதா?",
+                "உங்களுக்கு சுவாசிப்பதில் சிரமம் உள்ளதா?",
+                "உங்களுக்கு சுவை உணர்வு இழந்துள்ளீர்களா?",
+                "உங்களுக்கு மணம் உணரும் திறன் இழந்துள்ளீர்களா?",
+                "உங்கள் மூக்கில் அரிப்பு உள்ளதா?",
+                "உங்கள் கண்களில் அரிப்பு உள்ளதா?",
+                "உங்கள் வாயில் அரிப்பு உள்ளதா?",
+                "உங்கள் உள் காதில் அரிப்பு உள்ளதா?",
+                "உங்களுக்கு தும்மல் வருகிறதா?",
+                "உங்களுக்கு கண் சிவத்தல் (பிங்க் ஐ) உள்ளதா?"
+            ];
+            return tamilQuestions[index];
         }
 
         function translateToChinese() {
             document.querySelector('h1').textContent = '感冒预测器';
             document.querySelector('.chat-message:first-child').textContent = '欢迎使用感冒预测器。我将问您几个问题来评估您的风险。请如实回答。';
-            document.querySelector('.chat-message:nth-child(2)').textContent = '您是否有流鼻涕或鼻塞？（是/否）';
+            document.getElementById('questions-container').querySelector('.chat-message').textContent = getChineseQuestion(currentQuestionIndex - 1);
             document.querySelectorAll('.btn-green')[0].textContent = '是';
             document.querySelectorAll('.btn-green')[1].textContent = '否';
             document.querySelector('.btn-green i').nextSibling.textContent = ' 返回';
@@ -200,7 +379,7 @@
         function translateToHindi() {
             document.querySelector('h1').textContent = 'सर्दी प्रेडिक्टर';
             document.querySelector('.chat-message:first-child').textContent = 'सर्दी प्रेडिक्टर में आपका स्वागत है। मैं आपके जोखिम का आकलन करने के लिए कुछ प्रश्न पूछूंगा। कृपया ईमानदारी से उत्तर दें।';
-            document.querySelector('.chat-message:nth-child(2)').textContent = 'क्या आपको बहती या बंद नाक है? (हां/नहीं)';
+            document.getElementById('questions-container').querySelector('.chat-message').textContent = getHindiQuestion(currentQuestionIndex - 1);
             document.querySelectorAll('.btn-green')[0].textContent = 'हां';
             document.querySelectorAll('.btn-green')[1].textContent = 'नहीं';
             document.querySelector('.btn-green i').nextSibling.textContent = ' वापस';
@@ -209,7 +388,7 @@
         function translateToUrdu() {
             document.querySelector('h1').textContent = 'سردی پیش گو';
             document.querySelector('.chat-message:first-child').textContent = 'سردی پیش گو میں خوش آمدید۔ میں آپ کے خطرے کا اندازہ لگانے کے لیے آپ سے کچھ سوالات پوچھوں گا۔ براہ کرم ایمانداری سے جواب دیں۔';
-            document.querySelector('.chat-message:nth-child(2)').textContent = 'کیا آپ کو بہتی یا بند ناک ہے؟ (ہاں/نہیں)';
+            document.getElementById('questions-container').querySelector('.chat-message').textContent = getUrduQuestion(currentQuestionIndex - 1);
             document.querySelectorAll('.btn-green')[0].textContent = 'ہاں';
             document.querySelectorAll('.btn-green')[1].textContent = 'نہیں';
             document.querySelector('.btn-green i').nextSibling.textContent = ' واپس';
@@ -218,7 +397,7 @@
         function translateToEnglish() {
             document.querySelector('h1').textContent = 'Cold Predictor';
             document.querySelector('.chat-message:first-child').textContent = 'Welcome to the Cold Predictor. I\'ll ask you a few questions to assess your risk. Please answer honestly.';
-            document.querySelector('.chat-message:nth-child(2)').textContent = 'Do you have a runny or stuffy nose? (Yes/No)';
+            document.getElementById('questions-container').querySelector('.chat-message').textContent = questions[currentQuestionIndex - 1];
             document.querySelectorAll('.btn-green')[0].textContent = 'Yes';
             document.querySelectorAll('.btn-green')[1].textContent = 'No';
             document.querySelector('.btn-green i').nextSibling.textContent = ' Back';
@@ -227,10 +406,19 @@
         function translateToRussian() {
             document.querySelector('h1').textContent = 'Предсказатель простуды';
             document.querySelector('.chat-message:first-child').textContent = 'Добро пожаловать в Предсказатель простуды. Я задам вам несколько вопросов для оценки вашего риска. Пожалуйста, отвечайте честно.';
-            document.querySelector('.chat-message:nth-child(2)').textContent = 'У вас есть насморк или заложенный нос? (Да/Нет)';
+            document.getElementById('questions-container').querySelector('.chat-message').textContent = getRussianQuestion(currentQuestionIndex - 1);
             document.querySelectorAll('.btn-green')[0].textContent = 'Да';
             document.querySelectorAll('.btn-green')[1].textContent = 'Нет';
             document.querySelector('.btn-green i').nextSibling.textContent = ' Назад';
+        }
+
+        function translateToTamil() {
+            document.querySelector('h1').textContent = 'சளி கணிப்பான்';
+            document.querySelector('.chat-message:first-child').textContent = 'சளி கணிப்பானுக்கு வரவேற்கிறோம். உங்கள் ஆபத்தை மதிப்பிட நான் சில கேள்விகளைக் கேட்பேன். தயவுசெய்து நேர்மையாக பதிலளிக்கவும்.';
+            document.getElementById('questions-container').querySelector('.chat-message').textContent = getTamilQuestion(currentQuestionIndex - 1);
+            document.querySelectorAll('.btn-green')[0].textContent = 'ஆம்';
+            document.querySelectorAll('.btn-green')[1].textContent = 'இல்லை';
+            document.querySelector('.btn-green i').nextSibling.textContent = ' பின்செல்';
         }
 
         // Theme toggle functionality

@@ -67,7 +67,7 @@
             transition: background-color 0.3s, transform 0.3s;
         }
         .option-btn:hover {
-            background-color: #f1c40f ;
+            background-color: #f1c40f;
             transform: translateY(-2px);
         }
         .action-buttons {
@@ -131,29 +131,20 @@
                 Do you have itchy eyes?
             </div>
             <div class="options">
-                <button class="option-btn" onclick="answerQuestion('Never')">Never</button>
-                <button class="option-btn" onclick="answerQuestion('Rarely')">Rarely</button>
-                <button class="option-btn" onclick="answerQuestion('Sometimes')">Sometimes</button>
-                <button class="option-btn" onclick="answerQuestion('Often')">Often</button>
-                <button class="option-btn" onclick="answerQuestion('Very often')">Very often</button>
+                <button class="option-btn" onclick="answerQuestion(1)">Yes</button>
+                <button class="option-btn" onclick="answerQuestion(0)">No</button>
             </div>
         </div>
         <div class="action-buttons">
             <button class="btn btn-secondary" onclick="previousQuestion()"><i class="fas fa-arrow-left"></i> Back</button>
             <button class="btn btn-primary" onclick="nextQuestion()">Next <i class="fas fa-arrow-right"></i></button>
         </div>
-        <div class="contributors">
-            Contributors: 
-            <a href="#" class="rauf">Rauf</a> | 
-            <a href="#">Mudassir</a> | 
-            <a href="#">Peter</a> | 
-            <a href="#">Abdullah</a>
-        </div>
+        
     </div>
 
     <script>
         const questions = [
-        "Do you have a cough?",
+            "Do you have a cough?",
             "Do you have muscle aches?",
             "Do you feel tired?",
             "Do you have a sore throat?",
@@ -173,10 +164,10 @@
             "Do you have an itchy inner ear?",
             "Do you experience sneezing?",
             "Do you have pink eye?"
-  
         ];
 
         let currentQuestionIndex = 0;
+        let responses = {}; // Dictionary to store answers
 
         function displayNextQuestion() {
             const questionText = document.getElementById('question-text');
@@ -199,12 +190,14 @@
                     questionText.textContent = "Thank you for answering all the questions. We will now analyze your responses.";
                     optionButtons.forEach(btn => btn.style.display = 'none');
                     document.querySelector('.btn-primary').style.display = 'none';
+                    // Removed printResponses call
                 }
             }, 300);
         }
 
         function answerQuestion(answer) {
-            console.log(`Question ${currentQuestionIndex}: ${answer}`);
+            const currentQuestion = questions[currentQuestionIndex - 1]; // Get the current question
+            responses[currentQuestion] = answer; // Store the answer in the dictionary
             nextQuestion();
         }
 
@@ -216,6 +209,26 @@
             if (currentQuestionIndex > 1) {
                 currentQuestionIndex -= 2;
                 displayNextQuestion();
+            }
+        }
+
+        const responseContainer = document.createElement('div');
+        responseContainer.className = 'response-container';
+        responseContainer.style.marginTop = '20px';
+        responseContainer.style.fontSize = '16px';
+        responseContainer.style.textAlign = 'center';
+        document.querySelector('.container').appendChild(responseContainer);
+
+        function printResponses() {
+            responseContainer.innerHTML = ""; // Clear previous responses
+            const title = document.createElement('h3');
+            title.textContent = "Your Responses:";
+            responseContainer.appendChild(title);
+
+            for (const [question, answer] of Object.entries(responses)) {
+                const responseText = document.createElement('p');
+                responseText.textContent = `${question} - Answer: ${answer}`;
+                responseContainer.appendChild(responseText);
             }
         }
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heart Predictor</title>
+    <title>Heart Disease Predictor</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -70,50 +70,16 @@
             background-color: #c0392b;
             transform: translateY(-2px);
         }
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
         #theme-toggle {
             position: fixed;
             top: 10px;
-            right: 10px;
+            right: 10px; /* Kept the button on the right */
             z-index: 1000;
         }
-        @media (max-width: 768px) {
-            .option-btn {
-                flex: 1 0 100%;
-                max-width: 100%;
-            }
-        }
-        .fade-in {
-            animation: fadeIn 0.5s forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .question-enter {
-            animation: questionEnter 0.5s forwards;
-        }
-        @keyframes questionEnter {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .contributors {
-            text-align: center;
+        .action-buttons {
+            display: flex;
+            justify-content: space-between; /* Align buttons to opposite corners */
             margin-top: 20px;
-            font-size: 14px;
-        }
-        .contributors a {
-            color: inherit;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        .contributors  {
-            font-size: 18px;
-            font-weight: bold;
         }
     </style>
 </head>
@@ -123,38 +89,29 @@
     </button>
     <div class="header">
         <a href="/back" class="btn btn-light home-btn"><i class="fas fa-home"></i></a>
-        Heart Predictor
+        Heart Disease Predictor
     </div>
     <div class="container">
         <div class="question-container">
             <div class="question" id="question-text">
-                Do you have itchy eyes?
+                Do you have a cough?
             </div>
             <div class="options">
-                <button class="option-btn" onclick="answerQuestion('Never')">Never</button>
-                <button class="option-btn" onclick="answerQuestion('Rarely')">Rarely</button>
-                <button class="option-btn" onclick="answerQuestion('Sometimes')">Sometimes</button>
-                <button class="option-btn" onclick="answerQuestion('Often')">Often</button>
-                <button class="option-btn" onclick="answerQuestion('Very often')">Very often</button>
+                <button class="option-btn" onclick="answerQuestion(1)">Yes</button>
+                <button class="option-btn" onclick="answerQuestion(0)">No</button>
             </div>
         </div>
         <div class="action-buttons">
             <button class="btn btn-secondary" onclick="previousQuestion()"><i class="fas fa-arrow-left"></i> Back</button>
             <button class="btn btn-primary" onclick="nextQuestion()">Next <i class="fas fa-arrow-right"></i></button>
         </div>
-        <div class="contributors">
-            Contributors: 
-            <a href="#" class="rauf">Rauf</a> | 
-            <a href="#">Mudassir</a> | 
-            <a href="#">Peter</a> | 
-            <a href="#">Abdullah</a>
-        </div>
+        <div class="response-container" style="margin-top: 20px; font-size: 16px; text-align: center;"></div>
     </div>
 
     <script>
         const questions = [
-        "Do you rest after running just a while?",
-            "what is your heart size im just making questions noe ",
+            "Do you have a cough?",
+            "Do you have muscle aches?",
             "Do you feel tired?",
             "Do you have a sore throat?",
             "Do you have a runny nose?",
@@ -173,42 +130,29 @@
             "Do you have an itchy inner ear?",
             "Do you experience sneezing?",
             "Do you have pink eye?"
-  
         ];
 
         let currentQuestionIndex = 0;
+        let responses = {}; // Dictionary to store answers
 
         function displayNextQuestion() {
             const questionText = document.getElementById('question-text');
             const optionButtons = document.querySelectorAll('.option-btn');
             
-            questionText.classList.remove('question-enter');
-            optionButtons.forEach(btn => btn.classList.remove('fade-in'));
-            
-            setTimeout(() => {
-                if (currentQuestionIndex < questions.length) {
-                    questionText.textContent = questions[currentQuestionIndex];
-                    questionText.classList.add('question-enter');
-                    optionButtons.forEach((btn, index) => {
-                        setTimeout(() => {
-                            btn.classList.add('fade-in');
-                        }, index * 100);
-                    });
-                    currentQuestionIndex++;
-                } else {
-                    questionText.textContent = "Thank you for answering all the questions. We will now analyze your responses.";
-                    optionButtons.forEach(btn => btn.style.display = 'none');
-                    document.querySelector('.btn-primary').style.display = 'none';
-                }
-            }, 300);
+            if (currentQuestionIndex < questions.length) {
+                questionText.textContent = questions[currentQuestionIndex];
+                currentQuestionIndex++;
+            } else {
+                questionText.textContent = "Thank you for answering all the questions. We will now analyze your responses.";
+                optionButtons.forEach(btn => btn.style.display = 'none');
+                document.querySelector('.btn-primary').style.display = 'none';
+                printResponses();
+            }
         }
 
         function answerQuestion(answer) {
-            console.log(`Question ${currentQuestionIndex}: ${answer}`);
-            nextQuestion();
-        }
-
-        function nextQuestion() {
+            const currentQuestion = questions[currentQuestionIndex - 1]; // Get the current question
+            responses[currentQuestion] = answer; // Store the answer in the dictionary
             displayNextQuestion();
         }
 
@@ -216,6 +160,26 @@
             if (currentQuestionIndex > 1) {
                 currentQuestionIndex -= 2;
                 displayNextQuestion();
+            }
+        }
+
+        const responseContainer = document.createElement('div');
+        responseContainer.className = 'response-container';
+        responseContainer.style.marginTop = '20px';
+        responseContainer.style.fontSize = '16px';
+        responseContainer.style.textAlign = 'center';
+        document.querySelector('.container').appendChild(responseContainer);
+
+        function printResponses() {
+            responseContainer.innerHTML = ""; // Clear previous responses
+            const title = document.createElement('h3');
+            title.textContent = "Your Responses:";
+            responseContainer.appendChild(title);
+
+            for (const [question, answer] of Object.entries(responses)) {
+                const responseText = document.createElement('p');
+                responseText.textContent = `${question} - Answer: ${answer}`;
+                responseContainer.appendChild(responseText);
             }
         }
 

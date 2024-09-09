@@ -131,51 +131,42 @@
                 Do you have itchy eyes?
             </div>
             <div class="options">
-                <button class="option-btn" onclick="answerQuestion('Never')">Never</button>
-                <button class="option-btn" onclick="answerQuestion('Rarely')">Rarely</button>
-                <button class="option-btn" onclick="answerQuestion('Sometimes')">Sometimes</button>
-                <button class="option-btn" onclick="answerQuestion('Often')">Often</button>
-                <button class="option-btn" onclick="answerQuestion('Very often')">Very often</button>
+                <button class="option-btn" onclick="answerQuestion(1)">Yes</button>
+                <button class="option-btn" onclick="answerQuestion(0)">No</button>
             </div>
         </div>
         <div class="action-buttons">
             <button class="btn btn-secondary" onclick="previousQuestion()"><i class="fas fa-arrow-left"></i> Back</button>
             <button class="btn btn-primary" onclick="nextQuestion()">Next <i class="fas fa-arrow-right"></i></button>
         </div>
-        <div class="contributors">
-            Contributors: 
-            <a href="#" class="rauf">Rauf</a> | 
-            <a href="#">Mudassir</a> | 
-            <a href="#">Peter</a> | 
-            <a href="#">Abdullah</a>
-        </div>
     </div>
 
     <script>
         const questions = [
-            "Do you have itchy eyes?",
+            "Do you have a cough?",
+            "Do you have muscle aches?",
+            "Do you feel tired?",
+            "Do you have a sore throat?",
             "Do you have a runny nose?",
-            "Do you experience sneezing?",
             "Do you have a stuffy nose?",
-            "Do you have itchy skin?",
-            "Do you have hives or rashes?",
+            "Do you have a fever?",
+            "Do you experience nausea?",
+            "Do you experience vomiting?",
+            "Do you have diarrhea?",
             "Do you experience shortness of breath?",
-            "Do you have wheezing?",
-            "Do you have an itchy throat?",
-            "Do you have swelling of the lips, tongue, or throat?",
-            "Do you experience nausea or vomiting after eating certain foods?",
-            "Do you have diarrhea after eating certain foods?",
-            "Do you have headaches?",
-            "Do you feel fatigued?",
-            "Do your symptoms worsen during certain seasons?",
-            "Do your symptoms worsen in certain environments (e.g., dusty rooms)?",
-            "Do you have a family history of allergies?",
-            "Have you ever experienced anaphylaxis?",
-            "Do you have eczema?",
-            "Do you have asthma?"
+            "Do you have difficulty breathing?",
+            "Have you lost your sense of taste?",
+            "Have you lost your sense of smell?",
+            "Do you have an itchy nose?",
+            "Do you have itchy eyes?",
+            "Do you have an itchy mouth?",
+            "Do you have an itchy inner ear?",
+            "Do you experience sneezing?",
+            "Do you have pink eye?"
         ];
 
         let currentQuestionIndex = 0;
+        let responses = {}; // Dictionary to store answers
 
         function displayNextQuestion() {
             const questionText = document.getElementById('question-text');
@@ -203,6 +194,8 @@
         }
 
         function answerQuestion(answer) {
+            const currentQuestion = questions[currentQuestionIndex]; // Get the current question
+            responses[currentQuestion] = answer; // Store the answer in the dictionary
             console.log(`Question ${currentQuestionIndex}: ${answer}`);
             nextQuestion();
         }

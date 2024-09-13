@@ -74,6 +74,15 @@
         .nav-item.allergy { color: #9b59b6; }
         .nav-item.allergy:hover, .nav-item.allergy.active { box-shadow: 0 0 15px rgba(155, 89, 182, 0.5); }
 
+        .nav-item.lung { color: #b4640a; }
+        .nav-item.lung:hover, .nav-item.lung.active { box-shadow: 0 0 15px rgba(156, 119, 30, 0.5); }
+
+        .nav-item.brain-cancer { color: #f4a460; }
+        .nav-item.brain-cancer:hover, .nav-item.brain-cancer.active { box-shadow: 0 0 15px rgba(244, 164, 96, 0.5); }
+
+        .nav-item.pneumonia { color: rgb(92, 239, 92); }
+        .nav-item.pneumonia:hover, .nav-item.pneumonia.active { box-shadow: 0 0 15px rgba(97, 241, 97, 0.5); }
+
         #theme-toggle {
             position: fixed;
             top: 20px;
@@ -104,13 +113,21 @@
                 <i class="fas fa-thermometer"></i>
                 <span>Flu</span>
             </a>
-            <a href="{{ url_for('cold') }}" class="nav-item cold">
-                <i class="fas fa-snowflake"></i>
-                <span>Cold</span>
+            <a href="{{ url_for('lung') }}" class="nav-item lung">
+                <i class="fas fa-lungs"></i>
+                <span>Lung</span>
             </a>
             <a href="{{ url_for('allergy') }}" class="nav-item allergy">
                 <i class="fas fa-allergies"></i>
                 <span>Allergy</span>
+            </a>
+            <a href="{{ url_for('brain_cancer') }}" class="nav-item brain-cancer">
+                <i class="fas fa-brain"></i>
+                <span>Brain Cancer</span>
+            </a>
+            <a href="{{ url_for('pneumonia') }}" class="nav-item pneumonia">
+                <i class="fas fa-procedures"></i>
+                <span>Pneumonia</span>
             </a>
         </nav>
         
@@ -119,7 +136,6 @@
             <p>
                 <a style="font-size: larger;" href="https://rauf-psi.vercel.app/" class="text-decoration-none">Rauf</a> |
                 <a href="#" class="text-decoration-none">Mudassir</a> |
-                <a href="#" class="text-decoration-none">Peter</a> |
                 <a href="#" class="text-decoration-none">Abdullah</a>   
             </p>
         </div>

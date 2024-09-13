@@ -33,9 +33,9 @@ async def diabetes(request: Request):
 async def flu(request: Request):
     return templates.TemplateResponse("flu.html", {"request": request})
 
-@app.get("/cold")
-async def cold(request: Request):
-    return templates.TemplateResponse("cold.html", {"request": request})
+@app.get("/lung")
+async def lung(request: Request):
+    return templates.TemplateResponse("lung.html", {"request": request})
 
 @app.get("/allergy")
 async def allergy(request: Request):

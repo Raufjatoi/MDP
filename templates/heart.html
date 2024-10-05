@@ -107,89 +107,128 @@
         </div>
         <div class="response-container" style="margin-top: 20px; font-size: 16px; text-align: center;"></div>
     </div>
-
     <script>
-        const questions = [
-            "Do you have a cough?",
-            "Do you have muscle aches?",
-            "Do you feel tired?",
-            "Do you have a sore throat?",
-            "Do you have a runny nose?",
-            "Do you have a stuffy nose?",
-            "Do you have a fever?",
-            "Do you experience nausea?",
-            "Do you experience vomiting?",
-            "Do you have diarrhea?",
-            "Do you experience shortness of breath?",
-            "Do you have difficulty breathing?",
-            "Have you lost your sense of taste?",
-            "Have you lost your sense of smell?",
-            "Do you have an itchy nose?",
-            "Do you have itchy eyes?",
-            "Do you have an itchy mouth?",
-            "Do you have an itchy inner ear?",
-            "Do you experience sneezing?",
-            "Do you have pink eye?"
-        ];
-
+    const questions = [
+    "Do you have a cough?",
+    "Do you have muscle aches?",
+    "Do you feel tired?",
+    "Do you have a sore throat?",
+    "Do you have a runny nose?",
+    "Do you have a stuffy nose?",
+    "Do you have a fever?",
+    "Do you experience nausea?",
+    "Do you experience vomiting?",
+    "Do you have diarrhea?",
+    "Do you experience shortness of breath?",
+    "Do you have difficulty breathing?",
+    "Have you lost your sense of taste?",
+    "Have you lost your sense of smell?",
+    "Do you have an itchy nose?",
+    "Do you have itchy eyes?",
+    "Do you have an itchy mouth?",
+    "Do you have an itchy inner ear?",
+    "Do you experience sneezing?",
+    "Do you have pink eye?"
+];
+    
         let currentQuestionIndex = 0;
         let responses = {}; // Dictionary to store answers
-
+    
         function displayNextQuestion() {
             const questionText = document.getElementById('question-text');
             const optionButtons = document.querySelectorAll('.option-btn');
-            
-            if (currentQuestionIndex < questions.length) {
-                questionText.textContent = questions[currentQuestionIndex];
-                currentQuestionIndex++;
-            } else {
-                questionText.textContent = "Thank you for answering all the questions. We will now analyze your responses.";
-                optionButtons.forEach(btn => btn.style.display = 'none');
-                document.querySelector('.btn-primary').style.display = 'none';
-                printResponses();
-            }
+    
+            questionText.classList.remove('question-enter');
+            optionButtons.forEach(btn => btn.classList.remove('fade-in'));
+    
+            setTimeout(() => {
+                if (currentQuestionIndex < questions.length) {
+                    questionText.textContent = questions[currentQuestionIndex];
+                    questionText.classList.add('question-enter');
+                    optionButtons.forEach((btn, index) => {
+                        setTimeout(() => {
+                            btn.classList.add('fade-in');
+                        }, index * 100);
+                    });
+                    currentQuestionIndex++;
+                } else {
+                    questionText.textContent = "Thank you for answering all the questions. We will now analyze your responses.";
+                    optionButtons.forEach(btn => btn.style.display = 'none');
+                    document.querySelector('.btn-primary').style.display = 'none';
+                    printResponses(); // Call to print responses
+                    sendResponses(); // Send responses to backend
+                }
+            }, 300);
         }
-
+    
         function answerQuestion(answer) {
             const currentQuestion = questions[currentQuestionIndex - 1]; // Get the current question
             responses[currentQuestion] = answer; // Store the answer in the dictionary
+            nextQuestion();
+        }
+    
+        function nextQuestion() {
             displayNextQuestion();
         }
-
+    
         function previousQuestion() {
             if (currentQuestionIndex > 1) {
                 currentQuestionIndex -= 2;
                 displayNextQuestion();
             }
         }
-
+    
         const responseContainer = document.createElement('div');
         responseContainer.className = 'response-container';
         responseContainer.style.marginTop = '20px';
         responseContainer.style.fontSize = '16px';
         responseContainer.style.textAlign = 'center';
         document.querySelector('.container').appendChild(responseContainer);
-
+    
         function printResponses() {
             responseContainer.innerHTML = ""; // Clear previous responses
             const title = document.createElement('h3');
             title.textContent = "Your Responses:";
             responseContainer.appendChild(title);
-
+    
             for (const [question, answer] of Object.entries(responses)) {
                 const responseText = document.createElement('p');
                 responseText.textContent = `${question} - Answer: ${answer}`;
                 responseContainer.appendChild(responseText);
             }
         }
-
+    
+        function sendResponses() {
+            // Send the responses to the FastAPI backend
+            fetch('/heart_submit_responses', { // Ensure this matches the backend endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ answers: responses }), // Send the responses in the expected format
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the result from FastAPI
+                const resultText = document.createElement('h4');
+                resultText.textContent = `Analysis Result: ${data.analysis}`; // Modify as per your backend logic
+                responseContainer.appendChild(resultText);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const errorText = document.createElement('p');
+                errorText.textContent = 'An error occurred while submitting your responses.';
+                responseContainer.appendChild(errorText);
+            });
+        }
+    
         displayNextQuestion(); // Display the first question
-
+    
         // Theme toggle functionality
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
         const icon = themeToggle.querySelector('i');
-
+    
         themeToggle.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
             body.classList.toggle('light-mode');
@@ -197,5 +236,6 @@
             icon.classList.toggle('fa-moon');
         });
     </script>
+        
 </body>
 </html>

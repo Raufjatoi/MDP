@@ -121,7 +121,7 @@
     </div>
 
     <script>
-        function submitDetails() {
+        async function submitDetails() {
             const gender = document.getElementById('gender').value;
             const age = document.getElementById('age').value;
             const hypertension = document.getElementById('hypertension').value;
@@ -130,24 +130,45 @@
             const bmi = document.getElementById('bmi').value;
             const hba1cLevel = document.getElementById('hba1c_level').value;
             const bloodGlucoseLevel = document.getElementById('blood_glucose_level').value;
-
+    
             if (!gender || !age || !hypertension || !heartDisease || !smokingHistory || !bmi || !hba1cLevel || !bloodGlucoseLevel) {
                 alert("Please fill in all fields.");
                 return;
             }
-
-            console.log(`Details Submitted: Gender: ${gender}, Age: ${age}, Hypertension: ${hypertension}, Heart Disease: ${heartDisease}, Smoking History: ${smokingHistory}, BMI: ${bmi}, HbA1c Level: ${hba1cLevel}, Blood Glucose Level: ${bloodGlucoseLevel}`);
-            alert("All good! Your answers are submitted.");
-            printResponses(gender, age, hypertension, heartDisease, smokingHistory, bmi, hba1cLevel, bloodGlucoseLevel);
+    
+            // Create the list of answers
+            const answers = [gender, age, hypertension, heartDisease, smokingHistory, bmi, hba1cLevel, bloodGlucoseLevel];
+    
+            try {
+                const response = await fetch('/diabetes_submit_responses', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ answers })
+                });
+    
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Response from server:', result);
+                    alert("All good! Your answers are submitted.");
+                    printResponses(gender, age, hypertension, heartDisease, smokingHistory, bmi, hba1cLevel, bloodGlucoseLevel);
+                } else {
+                    alert('Failed to submit the form. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('Error occurred during submission.');
+            }
         }
-
+    
         function printResponses(gender, age, hypertension, heartDisease, smokingHistory, bmi, hba1cLevel, bloodGlucoseLevel) {
             const responseContainer = document.querySelector('.response-container');
             responseContainer.innerHTML = ""; // Clear previous responses
             const title = document.createElement('h3');
             title.textContent = "Your Submitted Details:";
             responseContainer.appendChild(title);
-
+    
             const details = {
                 Gender: gender,
                 Age: age,
@@ -158,7 +179,7 @@
                 "HbA1c Level": hba1cLevel,
                 "Blood Glucose Level": bloodGlucoseLevel
             };
-
+    
             for (const [key, value] of Object.entries(details)) {
                 const responseText = document.createElement('p');
                 responseText.textContent = `${key}: ${value}`;
@@ -166,5 +187,6 @@
             }
         }
     </script>
+    
 </body>
 </html>

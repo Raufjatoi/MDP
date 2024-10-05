@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Lung cancer Predictor</title>
+    <title>Lung Cancer Predictor</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -67,7 +67,7 @@
             transition: background-color 0.3s, transform 0.3s;
         }
         .option-btn:hover {
-            background-color: #b4640a;
+            background-color: #8b3e05;
             transform: translateY(-2px);
         }
         .action-buttons {
@@ -104,16 +104,13 @@
         .contributors {
             text-align: center;
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 18px;
+            font-weight: bold;
         }
         .contributors a {
             color: inherit;
             text-decoration: none;
             margin: 0 10px;
-        }
-        .contributors  {
-            font-size: 18px;
-            font-weight: bold;
         }
     </style>
 </head>
@@ -123,7 +120,7 @@
     </button>
     <div class="header">
         <a href="/back" class="btn btn-light home-btn"><i class="fas fa-home"></i></a>
-        Lung cancer Predictor
+        Lung Cancer Predictor
     </div>
     <div class="container">
         <div class="question-container">
@@ -146,27 +143,19 @@
 
     <script>
         const questions = [
-        "Do you have a cough?",
-            "Do you have muscle aches?",
-            "Do you feel tired?",
-            "Do you have a sore throat?",
-            "Do you have a runny nose?",
-            "Do you have a stuffy nose?",
-            "Do you have a fever?",
-            "Do you experience nausea?",
-            "Do you experience vomiting?",
-            "Do you have diarrhea?",
+            "Do you smoke ?",
+            "Do you have yellow fingers?",
+            "Do you feel Anxiety?",
+            "Do you have peer pressure ?",
+            "Do you have chronic disease ?",
+            "Do you feel fatigue alot ?",
+            "Do you have a allergy ?",
+            "Do you feel wheezing ? ",
+            "Do you consume alot of alcohol ? ",
+            "Do you cough alot ? ",
             "Do you experience shortness of breath?",
-            "Do you have difficulty breathing?",
-            "Have you lost your sense of taste?",
-            "Have you lost your sense of smell?",
-            "Do you have an itchy nose?",
-            "Do you have itchy eyes?",
-            "Do you have an itchy mouth?",
-            "Do you have an itchy inner ear?",
-            "Do you experience sneezing?",
-            "Do you have pink eye?"
-  
+            "Do have SWALLOWING DIFFICULTY?",
+            "Any chest pain?"
         ];
 
         let currentQuestionIndex = 0;
@@ -206,7 +195,7 @@
         }
 
         function previousQuestion() {
-            if (currentQuestionIndex > 1) {
+            if (currentQuestionIndex > 0) {
                 currentQuestionIndex -= 2;
                 displayNextQuestion();
             }

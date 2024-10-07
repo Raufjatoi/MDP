@@ -3,6 +3,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 import joblib
+import pickle
 import numpy as np
 from pydantic import BaseModel
 from typing import List , Dict

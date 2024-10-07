@@ -227,3 +227,13 @@ async def diabetes_submit_responses(response: DiabetesResponse):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
+
+
+#import cv2
+#def load_img(path):
+#   img = cv2.imread(path)
+#   img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+#   img = cv2.resize(img,(size,size)) ## SIZE IS THE SIZE OF THE TENSOR WHICH THE MODEL EXPECTS
+#   img = np.expand_dims(img,axis=0)
+#   img = img / 255.0
+#   return img

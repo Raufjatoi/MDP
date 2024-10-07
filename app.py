@@ -114,14 +114,23 @@ async def flu_submit_responses(response: FluResponse):
         response.answers.get("Do you experience sneezing?", "no") == "yes",
         response.answers.get("Do you have pink eye?", "no") == "yes"
     ]
-    prediction = flu_model.predict([feature_vector])
+    with open("models/LR_FLU_ALLERGY.pkl") as m:
+        model1 = pickle.load(m)
+    def f_predictions(cough,muscle_aches,tiredness,sore_throat,runny_nose,stuffy_nose,fever,nausea,vomiting,diarrhea,shortness_of_breath,difficulty_breathing,loss_of_taste,loss_of_smell,itchy_nose,itchy_eyes,itchy_mouth,itchy_inner_ear,sneezing,pink_eye):
+        loss_of_senses = (loss_of_taste + loss_of_smell)/2
+        itchiness = (itchy_nose + itchy_eyes + itchy_mouth + itchy_inner_ear)/4
+        common_symptoms = (fever + nausea + vomiting + diarrhea)/4
+        breathing = (shortness_of_breath + difficulty_breathing)/2
+        x = np.array([[cough,muscle_aches,tiredness,sore_throat,runny_nose,stuffy_nose,fever,nausea,vomiting,diarrhea,shortness_of_breath,difficulty_breathing,loss_of_taste,loss_of_smell,itchy_nose,itchy_eyes,itchy_mouth,itchy_inner_ear,sneezing,pink_eye,loss_of_senses,itchiness,common_symptoms,breathing]])
+        prediction = model1.predict(x)
+        if prediction[0] == 0:
+            prediction = "Allergy"
+        else:
+            prediction = "Flu"
+        return prediction
+    prediction = f_predictions(feature_values[0],feature_values[1],feature_values[2],feature_values[3],feature_values[4],feature_values[5],feature_values[6],feature_values[7],feature_values[8],feature_values[9],feature_values[10],feature_values[11],feature_values[12],feature_values[13],feature_values[14],feature_values[15],feature_values[16],feature_values[17],feature_values[18],feature_values[19])
 
-    if prediction[0] == 1: 
-        analysis_result = "Possible flu symptoms detected."
-    else:
-        analysis_result = "No flu symptoms detected."
-
-    return {"analysis": analysis_result}
+    return {"analysis": prediction}
 
 
 
@@ -174,6 +183,21 @@ class DiabetesResponse(BaseModel):
 
 @app.post("/diabetes_submit_responses")
 async def diabetes_submit_responses(response: DiabetesResponse):
+    with open("models/RF_DIABETES.pkl",'rb') as file:
+        model = pickle.load(file)
+    def d_prediction(gender,age,hypertension,heart_disease,smoking_history,bmi,hba1c_level,blood_glucose_level):
+        f1 = (hba1c_level + blood_glucose_level)/age
+        f2 = (hypertension)/bmi
+        f3 = hba1c_level ** 2
+        f4 = blood_glucose_level ** 2
+        f5 = age ** 0.5
+        x = np.array([gender,age,hypertension,heart_disease,smoking_history,bmi,hba1c_level,blood_glucose_level,f1,f2,f3,f4,f5])
+        prediction = model.predict([x])
+        if prediction[0] == 0:
+            prediction = "Not Diabetic"
+        else:
+            prediction = "Diabetic"
+        return prediction
     answers_dict = response.answers
 
     # Convert the answers dict into a list of values for prediction
@@ -181,9 +205,9 @@ async def diabetes_submit_responses(response: DiabetesResponse):
     feature_values = list(answers_dict.values())
 
     # Convert to the correct format for your model, e.g., 2D array for sklearn
-    prediction = diabetes_model.predict([feature_values])
+    prediction = d_prediction(feature_values[0],feature_values[1],feature_values[2],feature_values[3],feature_values[4],feature_values[5],feature_values[6],feature_values[7])
 
-    return {"prediction": prediction[0]}  # Assuming single prediction
+    return {"prediction": prediction}  # Assuming single prediction
 
 #@app.post("/predict/flu")
 #async def predict_flu(data: dict):
